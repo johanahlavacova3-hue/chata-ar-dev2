@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AR Perníček – Chata</title>
+
+  <!-- A-Frame + AR.js NFT -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar-nft.min.js"></script>
+
+  <style>
+    body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; background: #000; }
+    #loading {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      color: #fff; font-family: Arial, sans-serif; font-size: 18px;
+      background: rgba(0,0,0,0.7); padding: 15px 30px; border-radius: 12px; z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">Načítání AR... Namířte na perníček</div>
+
+  <!-- AR.js NFT Scéna -->
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="colorManagement: true"
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+  >
+
+    <!-- NFT Marker: pernicek -->
+    <a-nft
+      type="nft"
+      url="nft/pernicek"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance="0.01"
+      smoothThreshold="5"
+    >
+
+      <!-- 3D model chata.glb -->
+      <a-entity
+        gltf-model="url(chata.glb)"
+        scale="0.5 0.5 0.5"
+        position="0 0.15 0"
+        rotation="0 0 0"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear"
+      ></a-entity>
+
+      <!-- Světlo -->
+      <a-entity light="type: ambient; intensity: 0.6"></a-entity>
+      <a-entity light="type: directional; intensity: 0.8" position="2 3 1"></a-entity>
+
+    </a-nft>
+
+    <!-- Kamera -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    // Skryj loading po načtení scény
+    const loading = document.getElementById('loading');
+    const scene = document.querySelector('a-scene');
+    scene.addEventListener('loaded', () => {
+      setTimeout(() => { loading.style.opacity = '0'; }, 1000);
+      setTimeout(() => { loading.style.display = 'none'; }, 1500);
+    });
+  </script>
+</body>
+</html>
